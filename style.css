@@ -1,17 +1,25 @@
-body, html {
+html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    width: 100%;
     background: #000;
 }
 
-#map {
-    height: 100%;
-    width: 100%;
-    z-index: 1;
+#app {
+    position: fixed;
+    inset: 0;
 }
 
+/* MAP — this is CRITICAL */
+#map {
+    position: absolute;
+    inset: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 0;
+}
+
+/* UI OVERLAY */
 #ui-overlay {
     position: absolute;
     top: 10px;
@@ -82,7 +90,6 @@ body, html {
     font-weight: bold;
     text-transform: uppercase;
     transition: 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .action-btn:hover {
@@ -92,12 +99,6 @@ body, html {
 
 .hidden {
     display: none;
-}
-
-.leaflet-bar a {
-    background-color: #1a1a1a !important;
-    color: #ff0000 !important;
-    border: 1px solid #ff0000 !important;
 }
 
 .leaflet-routing-container {
