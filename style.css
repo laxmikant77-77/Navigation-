@@ -1,108 +1,87 @@
-html, body {
+body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background: #000;
+    font-family: Arial, sans-serif;
 }
 
-#app {
-    position: fixed;
-    inset: 0;
-}
-
-/* MAP — this is CRITICAL */
 #map {
-    position: absolute;
-    inset: 0;
     height: 100vh;
-    width: 100vw;
-    z-index: 0;
-}
-
-/* UI OVERLAY */
-#ui-overlay {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    z-index: 1000;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-#search-container {
-    pointer-events: auto;
     width: 100%;
-    max-width: 400px;
-    background: #1a1a1a;
-    border: 2px solid #ff0000;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-    overflow: hidden;
+    z-index: 1;
+}
+
+/* Search Bar (Matching your screenshot) */
+#search-box {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
 }
 
 #search-input {
     width: 100%;
-    padding: 15px;
-    background: transparent;
-    border: none;
-    color: #fff;
+    padding: 12px;
+    border: 2px solid #D32F2F; /* Red Border */
+    border-radius: 8px;
     font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     outline: none;
 }
 
 #search-results {
+    background: white;
+    border-radius: 0 0 8px 8px;
     max-height: 200px;
     overflow-y: auto;
-    background: #111;
 }
 
-.result-item {
-    padding: 10px 15px;
-    color: #ccc;
+.search-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
     cursor: pointer;
-    border-top: 1px solid #333;
 }
 
-.result-item:hover {
-    background: #ff0000;
-    color: #fff;
-}
+.search-item:hover { background: #f9f9f9; }
 
-#controls {
-    pointer-events: auto;
+/* Bottom Buttons Stacked (Matching your screenshot) */
+#bottom-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     gap: 10px;
+    width: 200px;
 }
 
-.action-btn {
-    background: #000;
-    color: #fff;
-    border: 2px solid #ff0000;
-    padding: 10px 20px;
-    border-radius: 50px;
-    cursor: pointer;
+.red-btn {
+    background-color: #D32F2F; /* Specific Red from UI */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 14px;
     font-weight: bold;
-    text-transform: uppercase;
-    transition: 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-.action-btn:hover {
-    background: #ff0000;
-    color: #000;
-}
+.red-btn:active { background-color: #B71C1C; }
 
-.hidden {
-    display: none;
-}
-
-.leaflet-routing-container {
-    background: #1a1a1a !important;
-    color: #fff !important;
-    border: 2px solid #ff0000 !important;
-    }
+/* Popup Styling */
+.nav-go-btn {
+    background: #D32F2F;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 5px;
+        }
