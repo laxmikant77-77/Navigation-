@@ -1,54 +1,107 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body, html {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    text-align: center;
-}
-
-header {
-    background-color: #003366; /* IIITDM Theme Blue */
-    color: white;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 1.5rem;
+    height: 100%;
+    width: 100%;
+    background: #000;
 }
 
 #map {
-    height: 70vh; /* Map takes up 70% of the screen height */
+    height: 100%;
     width: 100%;
     z-index: 1;
 }
 
+#ui-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1000;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#search-container {
+    pointer-events: auto;
+    width: 100%;
+    max-width: 400px;
+    background: #1a1a1a;
+    border: 2px solid #ff0000;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+#search-input {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+}
+
+#search-results {
+    max-height: 200px;
+    overflow-y: auto;
+    background: #111;
+}
+
+.result-item {
+    padding: 10px 15px;
+    color: #ccc;
+    cursor: pointer;
+    border-top: 1px solid #333;
+}
+
+.result-item:hover {
+    background: #ff0000;
+    color: #fff;
+}
+
 #controls {
-    padding: 10px;
-    background: white;
+    pointer-events: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-button {
-    background-color: #0055a5;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+.action-btn {
+    background: #000;
+    color: #fff;
+    border: 2px solid #ff0000;
+    padding: 10px 20px;
+    border-radius: 50px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-button:hover {
-    background-color: #003366;
+.action-btn:hover {
+    background: #ff0000;
+    color: #000;
 }
 
-button:active {
-    transform: scale(0.98);
+.hidden {
+    display: none;
 }
+
+.leaflet-bar a {
+    background-color: #1a1a1a !important;
+    color: #ff0000 !important;
+    border: 1px solid #ff0000 !important;
+}
+
+.leaflet-routing-container {
+    background: #1a1a1a !important;
+    color: #fff !important;
+    border: 2px solid #ff0000 !important;
+    }
