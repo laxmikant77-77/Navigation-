@@ -1,29 +1,31 @@
-body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #000; font-family: 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
+body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #000; font-family: 'Inter', -apple-system, sans-serif; overflow: hidden; }
 
-/* MAP THEME: White Buildings / Gray Roads / Black Base */
+/* MAP STYLE: Inverted tiles for White Buildings & Gray Roads */
 #map { 
     height: 100%; 
     width: 100%; 
     background: #000;
-    /* Inversion filter to create the blueprint aesthetic */
-    filter: invert(100%) hue-rotate(180deg) brightness(1.1) contrast(1.1);
+    filter: invert(100%) hue-rotate(180deg) brightness(1.05) contrast(1.1);
 }
 
-/* UI Overlay styling */
-#search-box {
+/* Floating Search Card */
+#search-container {
     position: absolute;
     top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 90%;
-    left: 5%;
+    max-width: 450px;
     z-index: 1000;
 }
 
 .search-card {
-    background: rgba(15, 15, 15, 0.95);
-    border: 2.5px solid #ff0000;
+    background: rgba(18, 18, 18, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid #ff0000;
     border-radius: 28px;
-    padding: 12px 20px;
-    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.3);
+    padding: 12px 24px;
+    box-shadow: 0 8px 32px rgba(255, 0, 0, 0.2);
 }
 
 #search-input {
@@ -37,59 +39,83 @@ body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #000;
 
 #search-results {
     background: #111;
-    margin-top: 10px;
-    border-radius: 12px;
-    max-height: 200px;
+    margin-top: 12px;
+    border-radius: 16px;
+    max-height: 250px;
     overflow-y: auto;
+    border: 1px solid #333;
 }
 
-.search-item { padding: 15px; color: #fff; border-bottom: 1px solid #222; cursor: pointer; }
-.search-item:hover { background: #ff0000; }
+.search-item { padding: 16px; color: #eee; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; }
+.search-item:hover { background: #ff0000; color: white; }
 
-#controls {
+/* Buttons & Navigation UI */
+#ui-controls {
     position: absolute;
-    bottom: 30px;
+    bottom: 40px;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    justify-content: center;
     z-index: 1000;
 }
 
-.btn-main {
+.button-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+.fab {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.main-fab {
     background: #ff0000;
     color: white;
-    border: none;
-    padding: 16px 36px;
+    padding: 16px 32px;
     border-radius: 50px;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    font-size: 14px;
+    letter-spacing: 0.5px;
 }
 
-.btn-sub {
+.sub-fab {
     background: #000;
     color: #ff0000;
-    border: 1px solid #ff0000;
-    padding: 10px 20px;
+    border: 1.5px solid #ff0000;
+    padding: 10px 24px;
     border-radius: 30px;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-#gps-status {
+.fab:active { transform: scale(0.95); }
+
+/* GPS Accuracy Badge */
+#status-bar {
     position: absolute;
-    bottom: 5px;
-    left: 12px;
+    bottom: 10px;
+    left: 15px;
     color: #ff0000;
-    font-size: 10px;
+    font-size: 11px;
     z-index: 1001;
-    font-weight: bold;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
+
+.accuracy-dot { width: 6px; height: 6px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 5px #ff0000; }
 
 .hidden { display: none !important; }
 
-/* Popup styling */
-.leaflet-popup-content-wrapper { background: #000; color: #fff; border: 1px solid #ff0000; border-radius: 10px; }
+/* Custom Popup Style */
+.leaflet-popup-content-wrapper { background: #111; color: white; border: 1px solid #ff0000; border-radius: 12px; }
 .leaflet-popup-tip { background: #ff0000; }
+    
