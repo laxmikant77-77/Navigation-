@@ -3,34 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Campus Navigator Pro</title>
-    
+    <title>Campus Navigator</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="ui-top">
+    <div id="search-container">
         <div class="search-card">
-            <input type="text" id="search-input" placeholder="Search campus locations..." autocomplete="off">
+            <input type="text" id="search-input" placeholder="Search buildings...">
             <div id="search-results" class="hidden"></div>
         </div>
     </div>
 
     <div id="map"></div>
 
-    <div id="ui-bottom">
-        <button id="live-btn" onclick="toggleLiveLocation()" class="fab-btn main-btn">
-            <span class="icon">📍</span> <span id="btn-text">Live Location</span>
-        </button>
-        <div class="secondary-actions">
-            <button onclick="cancelRoute()" id="cancel-route" class="fab-btn small-btn hidden">❌ Stop Route</button>
-        </div>
+    <div id="bottom-ui">
+        <button id="btn-live" onclick="toggleLiveLocation()" class="main-fab">📍 Show Live Location</button>
+        <button id="btn-cancel-route" onclick="cancelRoute()" class="sub-fab hidden">❌ Cancel Route</button>
     </div>
-
-    <div id="gps-status" class="hidden">Signal: <span id="accuracy-val">--</span>m</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
