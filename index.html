@@ -2,26 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Navigator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Campus Elite Nav</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="search-box">
-        <input type="text" id="search-input" placeholder="Search campus locations...">
-        <div id="search-results"></div>
+    <div id="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="Search Campus...">
+            <div id="search-results"></div>
+        </div>
     </div>
 
     <div id="map"></div>
 
-    <div id="bottom-controls">
-        <button onclick="showLiveLocation()" class="red-btn">📍 Show Live</button>
-        <button onclick="cancelLiveLocation()" class="red-btn">❌ Cancel Live</button>
-        <button onclick="cancelRoute()" class="red-btn">❌ Cancel Route</button>
+    <div id="nav-controls">
+        <button onclick="toggleLiveLocation()" id="live-btn" class="glass-btn pulse-red">
+            <span id="live-icon">📍</span> <span id="live-text">Show Live</span>
+        </button>
+        <button id="cancel-route-btn" onclick="cancelRoute()" class="glass-btn hidden">
+            ❌ Cancel Route
+        </button>
     </div>
+
+    <div id="accuracy-badge" class="hidden">GPS Accuracy: <span id="accuracy-val">0</span>m</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
