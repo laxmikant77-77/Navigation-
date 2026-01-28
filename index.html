@@ -3,30 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Campus Navigator Pro</title>
+    <title>Campus Pro | Navigation</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="search-box">
+    <div id="search-container">
         <div class="search-card">
-            <input type="text" id="search-input" placeholder="Search campus locations..." autocomplete="off">
+            <input type="text" id="search-input" placeholder="Search buildings or departments..." autocomplete="off">
             <div id="search-results" class="hidden"></div>
         </div>
     </div>
 
     <div id="map"></div>
 
-    <div id="controls">
-        <button id="live-btn" onclick="toggleLiveLocation()" class="btn-main">📍 Show Live Location</button>
-        <div class="extra-actions">
-            <button id="cancel-route-btn" onclick="cancelRoute()" class="btn-sub hidden">❌ Cancel Route</button>
+    <div id="ui-controls">
+        <div class="button-group">
+            <button id="live-btn" onclick="toggleLiveLocation()" class="fab main-fab">
+                <span id="live-icon">📍</span> <span id="live-text">Show Live Location</span>
+            </button>
+            <button id="cancel-route-btn" onclick="cancelRoute()" class="fab sub-fab hidden">
+                ❌ Cancel Route
+            </button>
         </div>
     </div>
 
-    <div id="gps-status" class="hidden">GPS Accuracy: <span id="acc-val">--</span>m</div>
+    <div id="status-bar" class="hidden">
+        <div class="accuracy-dot"></div>
+        GPS Accuracy: <span id="acc-val">--</span>m
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
