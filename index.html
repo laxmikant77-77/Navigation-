@@ -4,26 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Navigation</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Leaflet CSS (with integrity for GitHub Pages) -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+
+    <!-- Routing machine CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    />
+
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+
+<div id="app">
     <div id="ui-overlay">
         <div id="search-container">
             <input type="text" id="search-input" placeholder="Search campus locations...">
             <div id="search-results"></div>
         </div>
+
         <div id="controls">
             <button id="btn-live" class="action-btn">Show Live Location</button>
             <button id="btn-stop-live" class="action-btn hidden">Cancel Live Location</button>
             <button id="btn-cancel-route" class="action-btn hidden">Cancel Route</button>
         </div>
     </div>
+
     <div id="map"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-    <script src="script.js"></script>
+</div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Leaflet JS -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kP6fR3vYgQh+7nU7B6H+0YJ5Y0hE5fJQG6RkM="
+    crossorigin=""
+></script>
+
+<!-- Routing -->
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script src="./script.js"></script>
+
 </body>
 </html>
