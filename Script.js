@@ -1,81 +1,131 @@
-// 1. Initialize the Map centered on IIITDM Kurnool
-// Coordinates: Approx 15.7615° N, 78.0360° E (Jagannathagattu Hill)
-const map = L.map('map').setView([15.7615, 78.0360], 16);
+const SUPABASE_URL = "https://iistugxdqonjsrxuvpgs.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpc3R1Z3hkcW9uanNyeHV2cGdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyODE5MzAsImV4cCI6MjA4Mjg1NzkzMH0.QFZKAZnFc-6jrCaOUs0ghAW227OXN1Y2XevOC3BUVX4";
+const supabase = libsupabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2. Add OpenStreetMap Tile Layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
+const map = L.map('map').setView([15.759257, 78.037734], 17);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// 3. Define Icons
-const campusIcon = L.icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // Red Pin
-    iconSize: [30, 30],
-    iconAnchor: [15, 30]
+let locations = [];
+let userLocation = null;
+let routingControl = null;
+let watchId = null;
+let liveMarker = null;
+
+async function fetchLocations() {
+    const { data, error } = await supabase
+        .from('Location')
+        .select('*');
+    
+    if (data) {
+        locations = data;
+        renderMarkers();
+    }
+}
+
+function renderMarkers() {
+    locations.forEach(loc => {
+        const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+        marker.bindPopup(`
+            <div style="color:#000">
+                <strong style="color:#ff0000">${loc.name}</strong><br>
+                ${loc.description}<br><br>
+                <button onclick="calculateRoute(${loc.lat}, ${loc.lng})" 
+                        style="background:#ff0000; color:#fff; border:none; padding:5px 10px; cursor:pointer; width:100%">
+                    Go Here
+                </button>
+            </div>
+        `);
+    });
+}
+
+document.getElementById('search-input').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const resultsDiv = document.getElementById('search-results');
+    resultsDiv.innerHTML = '';
+    
+    if (term.length < 1) return;
+
+    const filtered = locations.filter(l => l.name.toLowerCase().includes(term));
+    filtered.forEach(l => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        div.innerText = l.name;
+        div.onclick = () => {
+            map.flyTo([l.lat, l.lng], 19);
+            resultsDiv.innerHTML = '';
+            document.getElementById('search-input').value = l.name;
+        };
+        resultsDiv.appendChild(div);
+    });
 });
 
-const userIcon = L.icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/747/747376.png', // Blue User Dot
-    iconSize: [35, 35],
-    iconAnchor: [17, 17]
-});
+document.getElementById('btn-live').onclick = () => {
+    if ("geolocation" in navigator) {
+        document.getElementById('btn-live').classList.add('hidden');
+        document.getElementById('btn-stop-live').classList.remove('hidden');
+        
+        watchId = navigator.geolocation.watchPosition((pos) => {
+            userLocation = [pos.coords.latitude, pos.coords.longitude];
+            
+            if (!liveMarker) {
+                liveMarker = L.circleMarker(userLocation, {
+                    color: '#ff0000',
+                    fillColor: '#ff0000',
+                    fillOpacity: 0.8,
+                    radius: 8
+                }).addTo(map);
+            } else {
+                liveMarker.setLatLng(userLocation);
+            }
+            map.panTo(userLocation);
+        }, (err) => console.error(err), { enableHighAccuracy: true });
+    }
+};
 
-// 4. Add Static Markers for Campus Locations
-// Note: You can adjust these coordinates slightly to match the exact building entrances.
-const locations = [
-    { name: "Admin Block", lat: 15.7615, lng: 78.0360 },
-    { name: "Library", lat: 15.7625, lng: 78.0350 },
-    { name: "Boys Hostel", lat: 15.7595, lng: 78.0370 },
-    { name: "Cafeteria", lat: 15.7605, lng: 78.0380 }
-];
+document.getElementById('btn-stop-live').onclick = () => {
+    if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        if (liveMarker) map.removeLayer(liveMarker);
+        liveMarker = null;
+        watchId = null;
+        document.getElementById('btn-live').classList.remove('hidden');
+        document.getElementById('btn-stop-live').classList.add('hidden');
+    }
+};
 
-locations.forEach(loc => {
-    L.marker([loc.lat, loc.lng], {icon: campusIcon})
-     .addTo(map)
-     .bindPopup(`<b>${loc.name}</b>`);
-});
-
-// 5. Live Location System
-let userMarker = null;
-
-function locateUser() {
-    if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
+window.calculateRoute = (destLat, destLng) => {
+    if (!userLocation) {
+        alert("Please enable live location first");
         return;
     }
 
-    // Use watchPosition to track movement in real-time
-    navigator.geolocation.watchPosition(
-        (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const accuracy = position.coords.accuracy;
+    if (routingControl) map.removeControl(routingControl);
 
-            // If marker exists, update position. If not, create it.
-            if (userMarker) {
-                userMarker.setLatLng([lat, lng]);
-            } else {
-                userMarker = L.marker([lat, lng], {icon: userIcon}).addTo(map)
-                    .bindPopup("You are here").openPopup();
-            }
-
-            // Center map on user
-            map.setView([lat, lng], 18); 
-            console.log(`Lat: ${lat}, Lng: ${lng}, Accuracy: ${accuracy}m`);
+    routingControl = L.Routing.control({
+        waypoints: [
+            L.latLng(userLocation[0], userLocation[1]),
+            L.latLng(destLat, destLng)
+        ],
+        lineOptions: {
+            styles: [{ color: '#ff0000', weight: 6 }]
         },
-        (error) => {
-            alert("Unable to retrieve your location. Make sure GPS is on.");
-        },
-        {
-            enableHighAccuracy: true, // Uses GPS for better precision
-            maximumAge: 10000,
-            timeout: 5000
-        }
-    );
-}
+        createMarker: () => null,
+        addWaypoints: false
+    }).addTo(map);
 
-// 6. Function to navigate to specific buttons
-function goToLocation(lat, lng) {
-    map.flyTo([lat, lng], 18);
-      }
+    document.getElementById('btn-cancel-route').classList.remove('hidden');
+    map.closePopup();
+};
+
+document.getElementById('btn-cancel-route').onclick = () => {
+    if (routingControl) {
+        map.removeControl(routingControl);
+        routingControl = null;
+        document.getElementById('btn-cancel-route').classList.add('hidden');
+    }
+};
+
+fetchLocations();
