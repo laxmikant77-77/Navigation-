@@ -1,112 +1,77 @@
-body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body, html { margin: 0; padding: 0; height: 100%; background: #000; font-family: sans-serif; }
 
-#map { height: 100%; width: 100%; z-index: 1; }
+#map { 
+    height: 100%; 
+    width: 100%; 
+    background: #111;
+    /* This filter creates the "White Building" effect on dark tiles */
+    filter: invert(100%) hue-rotate(180deg) brightness(90%) contrast(90%);
+}
 
-/* Floating Search Card */
-#ui-top {
+#search-container {
     position: absolute;
-    top: 20px;
-    left: 0;
-    right: 0;
+    top: 15px;
+    width: 90%;
+    left: 5%;
     z-index: 1000;
-    display: flex;
-    justify-content: center;
-    padding: 0 15px;
 }
 
 .search-card {
-    background: rgba(20, 20, 20, 0.9);
-    backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 450px;
-    border-radius: 28px;
-    border: 1px solid #ff0000;
-    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
-    overflow: hidden;
+    background: rgba(30, 30, 30, 0.9);
+    border: 1.5px solid #ff0000;
+    border-radius: 30px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
 }
 
 #search-input {
     width: 100%;
-    border: none;
-    padding: 15px 25px;
     background: transparent;
+    border: none;
     color: white;
     font-size: 16px;
     outline: none;
 }
 
 #search-results {
-    background: #111;
-    max-height: 300px;
+    background: #1a1a1a;
+    margin-top: 10px;
+    border-radius: 10px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
-.search-item {
-    padding: 15px 25px;
-    color: #ccc;
-    border-top: 1px solid #222;
-    cursor: pointer;
-}
+.result-item { padding: 12px; color: #fff; border-bottom: 1px solid #333; cursor: pointer; }
+.result-item:hover { background: #ff0000; }
 
-.search-item:hover { background: #ff0000; color: white; }
-
-/* Bottom Action Layout */
-#ui-bottom {
+#bottom-ui {
     position: absolute;
-    bottom: 30px;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+    bottom: 25px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    z-index: 1000;
 }
 
-.fab-btn {
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    transition: 0.3s transform;
-}
-
-.fab-btn:active { transform: scale(0.9); }
-
-.main-btn {
+.main-fab {
     background: #ff0000;
     color: white;
-    padding: 14px 30px;
-    border-radius: 30px;
-    width: 220px;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
-.small-btn {
-    background: #222;
+.sub-fab {
+    background: #000;
     color: #ff0000;
     border: 1px solid #ff0000;
     padding: 10px 20px;
-    border-radius: 20px;
-}
-
-/* Accuracy Badge */
-#gps-status {
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    color: #ff0000;
-    font-size: 10px;
-    z-index: 1001;
-    font-weight: bold;
+    border-radius: 50px;
 }
 
 .hidden { display: none !important; }
-
-/* Popup Styling to match Google Maps */
-.leaflet-popup-content-wrapper { background: #1a1a1a; color: white; border-radius: 12px; border: 1px solid #ff0000; }
-.leaflet-popup-tip { background: #ff0000; }
-        
+.leaflet-popup-content-wrapper { background: #000; color: #fff; border: 1px solid #ff0000; }
