@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IIITDM Kurnool Navigation</title>
+    <title>Campus Navigation</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <header>
-        <h1>IIITDM Kurnool Map</h1>
-        <p>Live Campus Navigation</p>
-    </header>
-
-    <div id="controls">
-        <button onclick="locateUser()">📍 Find Me</button>
-        <button onclick="goToLocation(15.7615, 78.0360)">Admin Block</button>
-        <button onclick="goToLocation(15.7625, 78.0350)">Library</button>
-        <button onclick="goToLocation(15.7595, 78.0370)">Hostels</button>
-        <button onclick="goToLocation(15.7605, 78.0380)">Cafeteria</button>
+    <div id="ui-overlay">
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="Search campus locations...">
+            <div id="search-results"></div>
+        </div>
+        <div id="controls">
+            <button id="btn-live" class="action-btn">Show Live Location</button>
+            <button id="btn-stop-live" class="action-btn hidden">Cancel Live Location</button>
+            <button id="btn-cancel-route" class="action-btn hidden">Cancel Route</button>
+        </div>
     </div>
-
     <div id="map"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
