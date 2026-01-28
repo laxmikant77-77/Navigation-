@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Campus Navigator</title>
+    <title>Campus Navigator Pro</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="search-container">
+    <div id="search-box">
         <div class="search-card">
-            <input type="text" id="search-input" placeholder="Search buildings...">
+            <input type="text" id="search-input" placeholder="Search campus locations..." autocomplete="off">
             <div id="search-results" class="hidden"></div>
         </div>
     </div>
 
     <div id="map"></div>
 
-    <div id="bottom-ui">
-        <button id="btn-live" onclick="toggleLiveLocation()" class="main-fab">📍 Show Live Location</button>
-        <button id="btn-cancel-route" onclick="cancelRoute()" class="sub-fab hidden">❌ Cancel Route</button>
+    <div id="controls">
+        <button id="live-btn" onclick="toggleLiveLocation()" class="btn-main">📍 Show Live Location</button>
+        <div class="extra-actions">
+            <button id="cancel-route-btn" onclick="cancelRoute()" class="btn-sub hidden">❌ Cancel Route</button>
+        </div>
     </div>
+
+    <div id="gps-status" class="hidden">GPS Accuracy: <span id="acc-val">--</span>m</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
