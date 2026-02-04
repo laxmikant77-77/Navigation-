@@ -1,45 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Campus Pro | Navigation</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>IIITDM Campus Navigator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <!-- Routing -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
+  />
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <!-- App CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-    <div id="search-container">
-        <div class="search-card">
-            <input type="text" id="search-input" placeholder="Search buildings or departments..." autocomplete="off">
-            <div id="search-results" class="hidden"></div>
-        </div>
-    </div>
-
-    <div id="map"></div>
-
-    <div id="ui-controls">
-        <div class="button-group">
-            <button id="live-btn" onclick="toggleLiveLocation()" class="fab main-fab">
-                <span id="live-icon">📍</span> <span id="live-text">Show Live Location</span>
-            </button>
-            <button id="cancel-route-btn" onclick="cancelRoute()" class="fab sub-fab hidden">
-                ❌ Cancel Route
-            </button>
-        </div>
-    </div>
-
-    <div id="status-bar" class="hidden">
-        <div class="accuracy-dot"></div>
-        GPS Accuracy: <span id="acc-val">--</span>m
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-    <script src="script.js"></script>
+  <!-- Search -->
+  <div class="top-bar">
+    <input id="searchInput" type="text" placeholder="Search campus locations..." />
+    <div id="searchResults"></div>
+  </div>
+  <!-- Controls -->
+  <div class="controls">
+    <button id="liveBtn">📍 Show Live</button>
+    <button id="stopLiveBtn">❌ Cancel Live</button>
+    <button id="cancelRouteBtn">❌ Cancel Route</button>
+  </div>
+  <!-- Map -->
+  <div id="map"></div>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
