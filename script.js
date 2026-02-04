@@ -31,10 +31,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { data, error } = await supabase.from("Location").select("*");
 
   if (error) {
-    alert("Supabase error loading locations");
+    console.error("Supabase error:", error);
+    alert("Error loading locations: " + error.message);
     return;
   }
 
+  if (!data || data.length === 0) {
+    console.warn("No locations found in database");
+    alert("No locations found in the database");
+    return;
+  }
+
+  console.log("Loaded locations:", data);
   locations = data;
 
   locations.forEach(loc => {
@@ -57,6 +65,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     markers.push({ location: loc, marker: marker });
   });
+
+  console.log("Markers created:", markers.length);
 
   /* ================= SEARCH ================= */
   const searchInput = document.getElementById("searchInput");
@@ -91,32 +101,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /* ================= LIVE LOCATION ================= */
   document.getElementById("liveBtn").onclick = () => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
 
-    watchId = navigator.geolocation.watchPosition(pos => {
-      const latlng = [pos.coords.latitude, pos.coords.longitude];
+    watchId = navigator.geolocation.watchPosition(
+      pos => {
+        const latlng = [pos.coords.latitude, pos.coords.longitude];
 
-      if (!userMarker) {
-        userMarker = L.circleMarker(latlng, {
-          radius: 8,
-          color: "#991b1b",
-          fillColor: "#fecaca",
-          fillOpacity: 1
-        }).addTo(map);
+        if (!userMarker) {
+          userMarker = L.circleMarker(latlng, {
+            radius: 8,
+            color: "#991b1b",
+            fillColor: "#fecaca",
+            fillOpacity: 1
+          }).addTo(map);
 
-        accuracyCircle = L.circle(latlng, {
-          radius: pos.coords.accuracy,
-          color: "#fecaca",
-          fillOpacity: 0.2
-        }).addTo(map);
-      } else {
-        userMarker.setLatLng(latlng);
-        accuracyCircle.setLatLng(latlng);
-        accuracyCircle.setRadius(pos.coords.accuracy);
+          accuracyCircle = L.circle(latlng, {
+            radius: pos.coords.accuracy,
+            color: "#fecaca",
+            fillOpacity: 0.2
+          }).addTo(map);
+
+          console.log("User location:", latlng);
+        } else {
+          userMarker.setLatLng(latlng);
+          accuracyCircle.setLatLng(latlng);
+          accuracyCircle.setRadius(pos.coords.accuracy);
+        }
+
+        if (destination) updateRoute(latlng, destination);
+      },
+      error => {
+        console.error("Geolocation error:", error);
+        alert("Error getting location: " + error.message);
       }
-
-      if (destination) updateRoute(latlng, destination);
-    });
+    );
   };
 
   document.getElementById("stopLiveBtn").onclick = () => {
