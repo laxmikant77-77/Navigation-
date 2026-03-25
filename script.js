@@ -1,5 +1,48 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+  /* ================= ROOM DATA MAPPING ================= */
+  // Mapping CSV building names to their respective floors and rooms
+  const roomData = {
+    "Department of Science": {
+      "All Floors": ["Info coming soon"]
+    },
+    "Administrative Block": {
+      "Ground Floor": ["SIC Lab"],
+      "1st Floor": ["All Associate Deans (LG-07, LG-04)", "Dining Room (LG-05)", "Chairman (LG-06)"],
+      "2nd Floor": ["Purchase Section (G04)", "Accounts Section (G05)", "Administration Section (G06)", "Academics Section (G07)"],
+      "3rd Floor": ["Store Room (105)", "Communications"]
+    },
+    "CSE Block": {
+      "Ground Floor": ["Project Room"],
+      "1st Floor": ["Computing Lab"],
+      "2nd Floor": ["Software Design and Product Level"],
+      "3rd Floor": ["Analog Circuits Lab"]
+    },
+    "KALAM boys Hostel": {
+      "Ground Floor": ["Barber"]
+    },
+    "Seminar Hall Block": {
+      "Ground Floor": ["Cafe"],
+      "1st Floor": ["Hundri Seminar Hall", "Krishna Seminar Hall"],
+      "2nd Floor": ["Tungabhadra Seminar Hall"],
+      "3rd Floor": ["Seminar Hall Complex"]
+    },
+    "Mechanical Engineering block": {
+      "Ground Floor": ["Thermal and Fluids Lab", "Material Processing and Tech Lab", "Design and Dynamics Lab"],
+      "1st Floor": ["HOD Cabin", "Department Office", "Faculty Cabin of Mechanical", "Robotics Lab", "DREAAMS Lab"]
+    },
+    "ECE Block": {
+      "Ground Floor": ["DSP Lab", "Electrical Drives and instrumentation Lab", "Drones Lab", "Embedded Systems and IOT Lab", "Microprocessor and Microcontroller Lab", "VLSI and DSP Lab", "ECE Faculty Cabin"],
+      "1st Floor": ["Computational Lab", "High Performance Computing and Research", "EC101", "ME101"],
+      "2nd Floor": ["Artificial Intelligence and Data Science Lab", "Cyber Physical System Lab", "EC201", "ME201"],
+      "3rd Floor": ["..."]
+    },
+    "Hill top dining hall (mess)": {
+      "Ground Floor": ["Veg Section", "Girls Section"],
+      "1st Floor": ["1st Year", "Non-Veg Section"]
+    }
+  };
+
   /* ================= SUPABASE ================= */
   const supabase = window.supabase.createClient(
     "https://iistugxdqonjsrxuvpgs.supabase.co",
@@ -53,22 +96,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       fillOpacity: 1
     }).addTo(map);
 
+    // Build the HTML for rooms if this building has rooms registered
+    let roomHtml = "";
+    if (roomData[loc.Name]) {
+      roomHtml = `<div style="margin-top:10px; max-height:120px; overflow-y:auto; border-top:1px solid #ccc; padding-top:5px; font-size: 0.9em;">
+        <strong style="color: #dc2626;">Facilities/Rooms:</strong><br>`;
+      
+      for (const [floor, rooms] of Object.entries(roomData[loc.Name])) {
+        roomHtml += `<div style="margin-bottom: 4px;"><strong>${floor}:</strong> <span style="color:#444;">${rooms.join(", ")}</span></div>`;
+      }
+      roomHtml += `</div>`;
+    }
+
     marker.bindPopup(`
       <b>${loc.Name}</b><br>
       ${loc.Category || ""}<br>
-      ${loc.Description || ""}<br><br>
+      ${loc.Description || ""}<br>
+      ${roomHtml}<br>
       <button onclick="navigateTo(${loc.Lat}, ${loc.Lng})"
-        style="padding:8px 12px;background:#dc2626;color:white;border:none;border-radius:8px">
+        style="padding:8px 12px;background:#dc2626;color:white;border:none;border-radius:8px; cursor:pointer;">
         🧭 Show Route
       </button>
-    `);
+    `, { maxHeight: 300 });
 
     markers.push({ location: loc, marker: marker });
   });
 
   console.log("Markers created:", markers.length);
 
-  /* ================= SEARCH ================= */
+  /* ================= SEARCH & ROOM MATCHING ================= */
   const searchInput = document.getElementById("searchInput");
   const searchResults = document.getElementById("searchResults");
 
@@ -78,25 +134,53 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!q) return;
 
-    locations
-      .filter(l =>
-        l.Name.toLowerCase().includes(q) ||
-        (l.Category || "").toLowerCase().includes(q) ||
-        (l.Description || "").toLowerCase().includes(q)
-      )
-      .forEach(l => {
+    locations.forEach(l => {
+      let matchedRoom = null;
+      
+      // 1. Check if query matches building Name, Category, or Description
+      let isMatch = l.Name.toLowerCase().includes(q) ||
+                    (l.Category || "").toLowerCase().includes(q) ||
+                    (l.Description || "").toLowerCase().includes(q);
+                    
+      // 2. Check if query matches a room inside the building
+      if (roomData[l.Name]) {
+        for (const [floor, rooms] of Object.entries(roomData[l.Name])) {
+          for (const room of rooms) {
+            if (room.toLowerCase().includes(q)) {
+              isMatch = true;
+              matchedRoom = room; 
+              break;
+            }
+          }
+          if (matchedRoom) break; // Break outer loop if room found
+        }
+      }
+
+      // 3. Render the match in search dropdown
+      if (isMatch) {
         const div = document.createElement("div");
         div.className = "result-item";
-        div.textContent = l.Name;
+        
+        // Show room hint if matched by room instead of building name
+        let content = `<strong>${l.Name}</strong>`;
+        if (matchedRoom) {
+          content += `<br><small style="color:#777;">Contains: <b>${matchedRoom}</b></small>`;
+        }
+        
+        div.innerHTML = content;
         div.onclick = () => {
           map.flyTo([l.Lat, l.Lng], 18);
           const markerObj = markers.find(m => m.location === l);
           if (markerObj) {
             markerObj.marker.openPopup();
           }
+          // Clear search text & hide results visually
+          searchInput.value = "";
+          searchResults.innerHTML = "";
         };
         searchResults.appendChild(div);
-      });
+      }
+    });
   });
 
   /* ================= LIVE LOCATION ================= */
