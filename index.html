@@ -3,99 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <title>IIITDM Campus Navigator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <!-- Routing -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
+  />
+  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <!-- App CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- ── OVERLAY LAYER (map sits behind everything) ── -->
+  <!-- Search -->
+  <div class="top-bar">
+    <input id="searchInput" type="text" placeholder="Search campus locations..." />
+    <div id="searchResults"></div>
+  </div>
+  <!-- Controls -->
+  <div class="controls">
+    <button id="liveBtn">📍 Show Live</button>
+    <button id="stopLiveBtn">❌ Cancel Live</button>
+    <button id="cancelRouteBtn">❌ Cancel Route</button>
+  </div>
+  <!-- Map -->
   <div id="map"></div>
-
-  <!-- ── TOP UI LAYER ── -->
-  <div class="ui-layer">
-
-    <!-- Search bar -->
-    <div class="search-card">
-      <div class="search-row">
-        <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7.5"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
-        </svg>
-        <input id="searchInput" type="text" placeholder="Search places, rooms, labs…" autocomplete="off" />
-        <button id="clearSearch" class="x-btn" aria-label="Clear">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
-      <div id="searchResults"></div>
-    </div>
-
-    <!-- Filter chips -->
-    <div class="chip-row" id="chipRow">
-      <button class="chip active" data-filter="all">All</button>
-      <button class="chip" data-filter="Academic">
-        <span class="cdot" style="--c:#0ea5e9"></span>Academic
-      </button>
-      <button class="chip" data-filter="Residential">
-        <span class="cdot" style="--c:#8b5cf6"></span>Residential
-      </button>
-      <button class="chip" data-filter="Food">
-        <span class="cdot" style="--c:#f59e0b"></span>Food
-      </button>
-      <button class="chip" data-filter="Sports">
-        <span class="cdot" style="--c:#10b981"></span>Sports
-      </button>
-      <button class="chip" data-filter="Service">
-        <span class="cdot" style="--c:#6366f1"></span>Service
-      </button>
-      <button class="chip" data-filter="Landmark">
-        <span class="cdot" style="--c:#ef4444"></span>Landmark
-      </button>
-      <button class="chip" data-filter="Medical">
-        <span class="cdot" style="--c:#ec4899"></span>Medical
-      </button>
-    </div>
-
-  </div><!-- /ui-layer -->
-
-  <!-- ── BOTTOM BUTTONS ── -->
-  <div class="bottom-row">
-    <button id="liveBtn" class="pill-btn blue">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-      </svg>
-      My Location
-    </button>
-    <button id="stopLiveBtn" class="pill-btn white">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
-        <circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
-      </svg>
-      Stop
-    </button>
-    <button id="cancelRouteBtn" class="pill-btn white">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
-        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
-      </svg>
-      Clear Route
-    </button>
-  </div>
-
-  <!-- ── DETAIL PANEL ── -->
-  <div id="overlay" class="overlay hidden"></div>
-  <div id="panel" class="panel hidden">
-    <div class="panel-handle"></div>
-    <button id="panelClose" class="panel-close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-    <div id="panelBody"></div>
-  </div>
-
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <script src="script.js"></script>
