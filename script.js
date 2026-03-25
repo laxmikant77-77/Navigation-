@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   /* ================= ROOM DATA MAPPING ================= */
-  // Mapping CSV building names to their respective floors and rooms
+  // Keys must match the exact 'Name' column in your CSV/Supabase
   const roomData = {
-    "Department of Science": {
-      "All Floors": ["Info coming soon"]
-    },
     "Administrative Block": {
       "Ground Floor": ["SIC Lab"],
       "1st Floor": ["All Associate Deans (LG-07, LG-04)", "Dining Room (LG-05)", "Chairman (LG-06)"],
@@ -40,6 +37,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Hill top dining hall (mess)": {
       "Ground Floor": ["Veg Section", "Girls Section"],
       "1st Floor": ["1st Year", "Non-Veg Section"]
+    },
+    "Department of Science": {
+      "Ground Floor": ["Physics Lab", "Chemistry Lab"],
+      "1st Floor": ["Info coming soon"]
+    },
+    "Library": {
+      "Ground Floor": ["..."],
+      "1st Floor": ["Reading Room", "Digital Library"],
+      "2nd Floor": ["..."]
+    },
+    "Central Workshop": {
+      "Ground Floor": ["Manufacturing Process Lab", "IC Engines Lab"]
+    },
+    "MVHR Boys Hostel": {
+      "Ground Floor": ["..."],
+      "1st Floor": ["..."],
+      "2nd Floor": ["..."]
+    },
+    "Kalpana Chawla girls hostel": {
+      "Ground Floor": ["..."],
+      "1st Floor": ["..."],
+      "2nd Floor": ["..."]
+    },
+    "SRK boys hostel": {
+      "Ground Floor": ["..."],
+      "1st Floor": ["..."],
+      "2nd Floor": ["..."]
     }
   };
 
@@ -96,13 +120,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       fillOpacity: 1
     }).addTo(map);
 
+    // .trim() prevents issues if your database has trailing spaces like "ECE Block "
+    const buildingName = (loc.Name || "").trim();
+
     // Build the HTML for rooms if this building has rooms registered
     let roomHtml = "";
-    if (roomData[loc.Name]) {
-      roomHtml = `<div style="margin-top:10px; max-height:120px; overflow-y:auto; border-top:1px solid #ccc; padding-top:5px; font-size: 0.9em;">
+    if (roomData[buildingName]) {
+      roomHtml = `<div style="margin-top:10px; max-height:140px; overflow-y:auto; border-top:1px solid #ccc; padding-top:5px; font-size: 0.9em;">
         <strong style="color: #dc2626;">Facilities/Rooms:</strong><br>`;
       
-      for (const [floor, rooms] of Object.entries(roomData[loc.Name])) {
+      for (const [floor, rooms] of Object.entries(roomData[buildingName])) {
         roomHtml += `<div style="margin-bottom: 4px;"><strong>${floor}:</strong> <span style="color:#444;">${rooms.join(", ")}</span></div>`;
       }
       roomHtml += `</div>`;
@@ -114,10 +141,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       ${loc.Description || ""}<br>
       ${roomHtml}<br>
       <button onclick="navigateTo(${loc.Lat}, ${loc.Lng})"
-        style="padding:8px 12px;background:#dc2626;color:white;border:none;border-radius:8px; cursor:pointer;">
+        style="padding:8px 12px;background:#dc2626;color:white;border:none;border-radius:8px; cursor:pointer; margin-top:5px;">
         🧭 Show Route
       </button>
-    `, { maxHeight: 300 });
+    `, { maxHeight: 320 });
 
     markers.push({ location: loc, marker: marker });
   });
@@ -129,22 +156,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchResults = document.getElementById("searchResults");
 
   searchInput.addEventListener("input", () => {
-    const q = searchInput.value.toLowerCase();
+    const q = searchInput.value.toLowerCase().trim();
     searchResults.innerHTML = "";
 
     if (!q) return;
 
     locations.forEach(l => {
       let matchedRoom = null;
+      const buildingName = (l.Name || "").trim();
       
       // 1. Check if query matches building Name, Category, or Description
-      let isMatch = l.Name.toLowerCase().includes(q) ||
+      let isMatch = buildingName.toLowerCase().includes(q) ||
                     (l.Category || "").toLowerCase().includes(q) ||
                     (l.Description || "").toLowerCase().includes(q);
                     
       // 2. Check if query matches a room inside the building
-      if (roomData[l.Name]) {
-        for (const [floor, rooms] of Object.entries(roomData[l.Name])) {
+      if (roomData[buildingName]) {
+        for (const [floor, rooms] of Object.entries(roomData[buildingName])) {
           for (const room of rooms) {
             if (room.toLowerCase().includes(q)) {
               isMatch = true;
@@ -164,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Show room hint if matched by room instead of building name
         let content = `<strong>${l.Name}</strong>`;
         if (matchedRoom) {
-          content += `<br><small style="color:#777;">Contains: <b>${matchedRoom}</b></small>`;
+          content += `<br><small style="color:#777; font-size:12px; display:block; margin-top:2px;">Contains: <b>${matchedRoom}</b></small>`;
         }
         
         div.innerHTML = content;
@@ -207,8 +235,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             color: "#fecaca",
             fillOpacity: 0.2
           }).addTo(map);
-
-          console.log("User location:", latlng);
         } else {
           userMarker.setLatLng(latlng);
           accuracyCircle.setLatLng(latlng);
@@ -264,3 +290,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
 });
+      
