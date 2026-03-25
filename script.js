@@ -48,7 +48,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       "2nd Floor": ["..."]
     },
     "Central Workshop": {
-      "Ground Floor": ["Manufacturing Process Lab", "IC Engines Lab"]
+      "Ground Floor": [
+        "Incharge Room", 
+        "Precision Manufacturing & Measurement Centre", 
+        "Quality Inspection and Product Validation Lab", 
+        "Computerised Hydraulic Base", 
+        "Hydraulic Press", 
+        "Laser Engraver", 
+        "Stir Casting Machine", 
+        "Drilling and Tapping", 
+        "Fitting", 
+        "Welding"
+      ]
     },
     "MVHR Boys Hostel": {
       "Ground Floor": ["..."],
