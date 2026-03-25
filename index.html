@@ -4,36 +4,88 @@
   <meta charset="UTF-8" />
   <title>IIITDM Campus Navigator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <!-- Routing -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
-  />
-  <!-- Supabase -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <!-- App CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Search -->
+
+  <!-- ===== TOP SEARCH BAR ===== -->
   <div class="top-bar">
-    <input id="searchInput" type="text" placeholder="Search campus locations..." />
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="searchInput" type="text" placeholder="Search places, rooms, labs..." autocomplete="off" />
+      <button id="clearSearch" class="clear-btn" aria-label="Clear">✕</button>
+    </div>
     <div id="searchResults"></div>
   </div>
-  <!-- Controls -->
-  <div class="controls">
-    <button id="liveBtn">📍 Show Live</button>
-    <button id="stopLiveBtn">❌ Cancel Live</button>
-    <button id="cancelRouteBtn">❌ Cancel Route</button>
+
+  <!-- ===== FILTER CHIPS ===== -->
+  <div class="chip-bar">
+    <button class="chip active" data-filter="all">
+      <span class="chip-dot" style="background:#3b82f6"></span> All
+    </button>
+    <button class="chip" data-filter="Academic">
+      <span class="chip-dot" style="background:#0ea5e9"></span> Academic
+    </button>
+    <button class="chip" data-filter="Residential">
+      <span class="chip-dot" style="background:#8b5cf6"></span> Residential
+    </button>
+    <button class="chip" data-filter="Food">
+      <span class="chip-dot" style="background:#f59e0b"></span> Food
+    </button>
+    <button class="chip" data-filter="Sports">
+      <span class="chip-dot" style="background:#10b981"></span> Sports
+    </button>
+    <button class="chip" data-filter="Service">
+      <span class="chip-dot" style="background:#6366f1"></span> Service
+    </button>
+    <button class="chip" data-filter="Landmark">
+      <span class="chip-dot" style="background:#ef4444"></span> Landmark
+    </button>
+    <button class="chip" data-filter="Medical">
+      <span class="chip-dot" style="background:#ec4899"></span> Medical
+    </button>
   </div>
-  <!-- Map -->
+
+  <!-- ===== MAP ===== -->
   <div id="map"></div>
-  <!-- Scripts -->
+
+  <!-- ===== BOTTOM ACTION BAR ===== -->
+  <div class="bottom-bar">
+    <button id="liveBtn" class="fab-btn primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+      </svg>
+      My Location
+    </button>
+    <button id="stopLiveBtn" class="fab-btn ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      Stop Live
+    </button>
+    <button id="cancelRouteBtn" class="fab-btn ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+      </svg>
+      Clear Route
+    </button>
+  </div>
+
+  <!-- ===== SIDE PANEL (Popup) ===== -->
+  <div id="sidePanel" class="side-panel hidden">
+    <button id="closePanel" class="close-panel">✕</button>
+    <div id="panelContent"></div>
+  </div>
+  <div id="panelOverlay" class="panel-overlay hidden"></div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <script src="script.js"></script>
