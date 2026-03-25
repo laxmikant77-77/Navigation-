@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       "1st Floor": ["1st Year", "Non-Veg Section"]
     },
     "Department of Science": {
-      "Ground Floor": ["Physics Lab", "Chemistry Lab"],
-      "1st Floor": ["Info coming soon"]
+      "Ground Floor": ["DS103", "DS104", "DS105", "DS106", "DS107", "DS108", "HOD (DOS)", "Functional Nanomaterials Lab"],
+      "1st Floor": ["DOS Seminar Hall", "SBI ATM", "DS102 (Sec B)", "DS101 (Sec A)", "IOT/CSE Lab", "VLSI Lab", "Maths Scholars Lab", "Language Lab", "Physics Lab"]
     },
     "Library": {
       "Ground Floor": ["..."],
