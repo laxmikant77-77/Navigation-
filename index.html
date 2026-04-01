@@ -4,36 +4,76 @@
   <meta charset="UTF-8" />
   <title>IIITDM Campus Navigator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <!-- Routing -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
-  />
-  <!-- Supabase -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <!-- App CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <!-- Search -->
-  <div class="top-bar">
-    <input id="searchInput" type="text" placeholder="Search campus locations..." />
-    <div id="searchResults"></div>
+<body class="dark">
+
+  <!-- TOP NAV BAR -->
+  <div class="top-nav">
+    <button class="back-btn" onclick="window.history.back()">
+      <span class="back-arrow">←</span> Back to Home
+    </button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
   </div>
-  <!-- Controls -->
-  <div class="controls">
-    <button id="liveBtn">📍 Show Live</button>
-    <button id="stopLiveBtn">❌ Cancel Live</button>
-    <button id="cancelRouteBtn">❌ Cancel Route</button>
+
+  <!-- SEARCH BAR -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Search campus locations..." autocomplete="off" />
+      <span class="search-icon">🔍</span>
+    </div>
+    <div id="searchResults" class="search-dropdown"></div>
   </div>
-  <!-- Map -->
+
+  <!-- CATEGORY FILTERS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-cat="All">All</button>
+    <button class="filter-btn" data-cat="Hostels">🛏️ Hostels</button>
+    <button class="filter-btn" data-cat="Academic">🏫 Academic</button>
+    <button class="filter-btn" data-cat="Dining">🍔 Dining</button>
+    <button class="filter-btn" data-cat="Labs">🔬 Labs</button>
+    <button class="filter-btn" data-cat="Admin">🏢 Admin</button>
+  </div>
+
+  <!-- DISTANCE PANEL -->
+  <div class="distance-panel" id="distancePanel">
+    <div class="dist-icon">🧭</div>
+    <div class="dist-info">
+      <div class="dist-label">Distance to destination</div>
+      <div class="dist-value" id="distValue">— m</div>
+    </div>
+    <div class="dist-eta">
+      <div class="dist-label">ETA (walking)</div>
+      <div class="dist-eta-val" id="etaValue">— min</div>
+    </div>
+    <div class="dist-steps">
+      <div class="dist-label">Steps</div>
+      <div class="dist-steps-val" id="stepsValue">—</div>
+    </div>
+  </div>
+
+  <!-- MAP -->
   <div id="map"></div>
-  <!-- Scripts -->
+
+  <!-- BOTTOM CONTROLS -->
+  <div class="controls">
+    <button id="liveBtn" class="ctrl-btn live">
+      <span>📍</span> Show Live
+    </button>
+    <button id="stopLiveBtn" class="ctrl-btn cancel">
+      <span>✕</span> Cancel Live
+    </button>
+    <button id="cancelRouteBtn" class="ctrl-btn cancel">
+      <span>✕</span> Cancel Route
+    </button>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <script src="script.js"></script>
